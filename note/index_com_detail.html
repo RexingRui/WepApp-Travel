@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>组件中的细节</title>
+	<script src="./vue.js"></script>
+	<style> 
+		.activated {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div id="root">
+		<div>
+			<counter ref="one" @change="handleChange"></counter>
+			<counter ref="two" @change="handleChange"></counter>
+			<div>{{total}}</div>
+			<!--通过ref引用dom><-->
+			<div></div>
+			<div ref='hello' @click="handleClick">hello</div>
+			<table>
+				<tbody>
+					<!--row组件替换,同样在ul中的li, select中的option，都使用is><-->
+					<tr is="row"></tr>
+					<tr is="row"></tr>   
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script>
+		//生命周期函数就是Vue实例在某一个时间点会自动执行的函数
+		Vue.component('row', {
+			//子组件中的data是一个函数,并且返回数据对象
+			data: function() {
+				return {
+					content:'this is content'
+				}
+			},
+			template: "<tr><td>{{content}}</td></tr>"
+		});
+
+		Vue.component('counter', {
+			template: '<div @click="handleComClick">{{number}}</div>',
+			data: function () {
+				return {
+					number: 0
+				}
+			},
+			methods: {
+				handleComClick: function () {
+					this.number++;
+					this.$emit('change');
+
+				}
+			}
+		})
+		var vm = new Vue({
+			el: '#root',
+			data: {
+				userInfor: [1, 2, 3],
+				total: 0
+			},
+			methods: {
+				handleClick: function() {
+					//ref在dom中表示对dom的引用
+					//输出div标签
+					console.log(this.$refs.hello);
+				},
+				handleChange: function() {
+					//ref在组件中表示对组件的应用
+					this.total = this.$refs.one.number
+								+this.$refs.two.number;
+				}
+			}
+
+		});
+	</script>
+</body>
+</html>

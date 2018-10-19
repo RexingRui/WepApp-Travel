@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>animate.css使用</title>
+	<script src="./vue.js"></script>
+	<style>
+		.active {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div id="root">
+		<input type="text" name="test" v-focus>
+	</div>
+
+<script>
+Vue.directive('focus', {
+	inserted: function (el) {
+		el.focus();
+	}
+});
+var mixin = {
+	data() {
+		return {
+			message: "hello rex",
+		};
+	},
+	created() {
+		console.log(this.message);
+	},
+};
+
+var vm = new Vue({
+	el: "#root",
+	mixins: [mixin],
+	created: function() {
+		console.log("Bye Rex");
+	}
+});
+
+</script>
+</body>
+</html>

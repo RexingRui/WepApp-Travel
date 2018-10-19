@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>组件参数校验与非props特性</title>
+	<!--父组件通过属性的方式向子组件传值，子组件通过事件触发的方式向父组件传值><-->
+	<script src="./vue.js"></script>
+	<style> 
+	</style>
+</head>
+
+
+<body>
+	<div id="root">
+		<child content="Rex"></child>
+		<child content="Rui"></child>
+	</div>
+	<script>
+
+		Vue.prototype.bus = new Vue();
+		Vue.component('child', {
+			data: function () {
+				return {
+					selfContent: this.content
+				};
+			},
+			props: {
+				content: String
+			},
+			template: '<div @click="handleClick">{{selfContent}}</div>',
+			methods: {
+				handleClick: function () {
+					this.bus.$emit('change', this.selfContent)
+				}
+			},
+			mounted: function () {
+				var this_ = this;
+				this_.bus.$on('change', function (msg) {
+					this_.selfContent = msg;
+				})
+			}
+
+		})
+		
+		
+		var vm = new Vue({
+			el: '#root',
+		});
+	</script>
+</body>
+</html>
